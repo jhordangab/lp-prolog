@@ -1,0 +1,101 @@
+:- discontiguous pai/2.
+:- discontiguous mae/2.
+
+% definindo mulheres na árvore
+% mulher(nome).
+mulher(ana).
+mulher(bia).
+mulher(eva).
+mulher(clo).
+mulher(lia).
+mulher(gal).
+
+% definindo homens na árvore
+% homem(nome).
+homem(ivo).
+homem(gil).
+homem(rai).
+homem(ary).
+homem(noe).
+
+% definindo casais na árvore
+% casal(mulher, homem).
+casal(ana, ivo).
+casal(bia, gil).
+casal(eva, rai).
+casal(lia, ary).
+
+% definindo progenitores
+gerou(ivo, eva).
+gerou(ana, eva).
+
+gerou(gil, rai).
+gerou(bia, rai).
+
+gerou(gil, clo).
+gerou(bia, clo).
+
+gerou(gil, ary).
+gerou(bia, ary).
+
+gerou(rai, noe).
+gerou(eva, noe).
+
+gerou(ary, gal).
+gerou(lia, gal).
+
+% verificar se é pai
+e_pai(PAI,FILHO):-homem(PAI),gerou(PAI,FILHO).
+
+% verificar se é mãe
+e_mae(MAE,FILHO):-mulher(MAE),gerou(MAE,FILHO).
+
+% verificar se são irmãos
+sao_irmaos(IRMAO_X,IRMAO_Y):-gerou(PROGENITOR,IRMAO_X),gerou(PROGENITOR,IRMAO_Y),IRMAO_X\=IRMAO_Y.
+
+% verificar se é filho
+e_filho(FILHO,PROGENITOR):-homem(FILHO),gerou(PROGENITOR,FILHO).
+
+% verificar se é filha
+e_filha(FILHA,PROGENITOR):-mulher(FILHA),gerou(PROGENITOR,FILHA).
+
+% verificar se é irmão
+e_irmao(IRMAO_X,IRMAO_Y):-homem(IRMAO_X),gerou(P,IRMAO_X),gerou(P,IRMAO_Y),IRMAO_X\=IRMAO_Y.
+
+% verificar se é irmã
+e_irma(IRMA_X,IRMAO_Y):-mulher(IRMA_X),gerou(P,IRMA_X),gerou(P,IRMAO_Y),IRMA_X\=IRMAO_Y.
+
+% verificar se é tio
+e_tio(TIO,SOBRINHO):-homem(TIO),sao_irmaos(TIO,PROGENITOR),gerou(PROGENITOR,SOBRINHO).
+
+% verificar se é tia
+e_tia(TIA,SOBRINHO):-mulher(TIA),sao_irmaos(TIA,PROGENITOR),gerou(PROGENITOR,SOBRINHO).
+
+% verificar se é sobrinho
+e_sobrinho(SOBRINHO,TIO) :-homem(SOBRINHO),sao_irmaos(TIO,PROGENITOR),gerou(PROGENITOR,SOBRINHO).
+e_sobrinho(SOBRINHO,TIA) :-homem(SOBRINHO),sao_irmaos(TIA,PROGENITOR),gerou(PROGENITOR,SOBRINHO).
+
+% verificar se é sobrinha
+e_sobrinha(SOBRINHA,TIO) :-mulher(SOBRINHA),sao_irmaos(TIO,PROGENITOR),gerou(PROGENITOR,SOBRINHA).
+e_sobrinha(SOBRINHA,TIA) :-mulher(SOBRINHA),sao_irmaos(TIA,PROGENITOR),gerou(PROGENITOR,SOBRINHA).
+
+% verificar se é primo
+e_primo(PRIMO_X, PRIMO_Y) :-homem(PRIMO_X),gerou(PROGENITOR_DO_X,PRIMO_X), gerou(PROGENITOR_DO_Y,PRIMO_Y), sao_irmaos(PROGENITOR_DO_X,PROGENITOR_DO_Y).
+
+% verificar se é prima
+e_primo(PRIMA_X, PRIMO_Y) :-mulher(PRIMA_X),gerou(PROGENITOR_DO_X,PRIMA_X), gerou(PROGENITOR_DO_Y,PRIMO_Y), sao_irmaos(PROGENITOR_DO_X,PROGENITOR_DO_Y).
+
+% verificar se é avô
+e_avo_h(AVO,NETO):-homem(AVO),gerou(AVO,PAI),gerou(PAI,NETO).
+
+% verificar se é avó
+e_avo_m(AVO,NETO):-mulher(AVO),gerou(AVO,PAI),gerou(PAI,NETO).
+
+% verificar se é cunhado
+e_cunhado(CUNHADO,OUTRO):-homem(CUNHADO),casal(MULHER_CUNHADO,CUNHADO),irmaos(MULHER_CUNHADO, OUTRO).
+
+% verificar se é cunhado
+e_cunhada(CUNHADA,OUTRO):-mulher(CUNHADA),casal(CUNHADA,HOMEM_CUNHADA),irmaos(HOMEM_CUNHADA, OUTRO).
+
+
+

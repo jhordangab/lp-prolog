@@ -1,0 +1,38 @@
+:- discontiguous mulher/1.
+:- discontiguous bonito/1.
+:- discontiguous gosta/2.
+:- discontiguous forte/1.
+:- discontiguous homem/1.
+:- discontiguous rico/1.
+
+mulher(ursula).
+bonito(ursula).
+
+homem(norberto).
+rico(norberto).
+bonito(norberto).
+
+mulher(berta).
+rico(berta).
+forte(berta).
+
+homem(pierre).
+forte(pierre).
+bonito(pierre).
+
+homem(bruno).
+amavel(bruno).
+forte(bruno).
+
+gosta(HOMEM,MULHER) :- homem(HOMEM), mulher(MULHER), bonito(MULHER).
+
+feliz(HOMEM) :- homem(HOMEM), rico(HOMEM).
+
+feliz(HOMEM) :- homem(HOMEM), mulher(MULHER), gosta(MULHER,HOMEM).
+
+feliz(MULHER) :- mulher(MULHER), homem(HOMEM), gosta(HOMEM,MULHER).
+
+gosta(berta,HOMEM) :- homem(HOMEM), gosta(HOMEM,berta).
+
+gosta(ursula,HOMEM) :- homem(HOMEM), gosta(HOMEM,ursula), rico(HOMEM), amavel(HOMEM); bonito(HOMEM), forte(HOMEM).
+
